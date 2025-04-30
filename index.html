@@ -6,26 +6,23 @@
   <title>𝐽𝛯𝐹𝐹 𝛸𝐷 - Bot Support</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/949/949459.png" type="image/x-icon"/>
   <link rel="stylesheet" href="styles.css" />
-</head>
+  <link rel="stylesheet" href="chatbot.css" /> </head>
 <body>
   <header>
     <h1 class="anime-header">𝐽𝛯𝐹𝐹 𝛸𝐷</h1>
   </header>
 
   <main>
-    <!-- Music Player -->
     <audio autoplay loop hidden>
-  <source src="https://audio.jukehost.co.uk/BzHJdutuumeC2C4RDfW6qZCXals7mw73" type="audio/mp3">
-  Your browser does not support the audio element.
-</audio>
+      <source src="https://audio.jukehost.co.uk/BzHJdutuumeC2C4RDfW6qZCXals7mw73" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
 
-    <!-- Anime Character -->
     <section class="anime-section">
       <h2 class="anime-title">Bot Hosting & Banning Services</h2>
       <img src="https://files.catbox.moe/nwstc4.jpeg" alt="Anya" class="anime-character" />
     </section>
 
-    <!-- Social Media Support -->
     <section class="anime-section">
       <h2 class="anime-title">Connect With Me</h2>
       <div class="social-links">
@@ -41,10 +38,35 @@
     </section>
   </main>
 
+  <div class="chatbot-tab" id="chatbot-tab">
+    <img src="https://cdn-icons-png.flaticon.com/128/6363/6363490.png" alt="Chatbot Icon" class="chatbot-icon" />
+    <span>AI Support</span>
+  </div>
+
+  <div class="chatbot-window" id="chat-window">
+    <div class="chat-header">
+      <img src="https://cdn-icons-png.flaticon.com/128/6363/6363490.png" alt="Chatbot Icon" class="chatbot-icon-header" />
+      <span>AI Chatbot</span>
+      <button class="close-button" onclick="document.getElementById('chat-window').classList.remove('open')">×</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      </div>
+    <div class="chat-input-area">
+      <input type="text" id="message-input" placeholder="Type your message...">
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+
   <footer>
     <p class="footer-text">© 2025 𝐽𝛯𝐹𝐹 𝛸𝐷. All Rights Reserved</p>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // Basic toggle functionality (you can integrate this into your existing script.js)
+    document.getElementById('chatbot-tab').addEventListener('click', () => {
+      document.getElementById('chat-window').classList.add('open');
+    });
+  </script>
 </body>
 </html>
