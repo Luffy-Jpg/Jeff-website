@@ -1,121 +1,83 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
-
-/* Body and Background */
 body {
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
-    overflow-x: hidden;
-    font-family: 'Arial', sans-serif;
-    padding: 0;
-    margin: 0;
-}
-
-/* Header */
-header {
-    text-align: center;
-    padding: 50px 0;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0a0a0a;
+  color: #fff;
+  text-align: center;
 }
 
 .anime-header {
-    font-size: 3em;
-    color: #ff00ff; /* Anime pink color */
-    font-weight: bold;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-family: 'Arial', sans-serif;
-}
-
-/* Main Sections */
-main {
-    padding: 20px;
+  font-size: 2.5rem;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #ff69b4;
+  text-shadow: 2px 2px 4px #000;
 }
 
 .anime-section {
-    margin: 20px 0;
-    padding: 20px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
 }
 
 .anime-title {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    font-weight: bold;
-    text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #ff69b4;
 }
 
 .anime-character {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-    margin-top: 20px;
+  width: 250px;
+  height: auto;
+  border-radius: 12px;
+  margin-top: 10px;
+  box-shadow: 0 0 15px #ff69b4;
 }
 
-/* Music Player Styling */
-#music-player audio {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-/* Social Links Section */
 .social-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
-.social-links a {
-    display: inline-block;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-    text-align: center;
-    transition: all 0.3s ease;
+.social-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #222;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.social-links a:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+.social-button:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
 }
 
 .social-logo {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin-right: 8px;
+  width: 24px;
+  height: 24px;
 }
 
-/* WhatsApp and Instagram Buttons */
 .whatsapp-button {
-    background-color: #25d366; /* WhatsApp color */
+  background-color: #25D366;
 }
 
 .instagram-button {
-    background-color: #e4405f; /* Instagram color */
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px 0;
-    background-color: #111;
-    margin-top: 40px;
+  background-color: #E4405F;
 }
 
 .footer-text {
-    color: #fff;
-    font-size: 1em;
-    margin-bottom: 0;
+  margin: 30px 0;
+  font-size: 0.9rem;
+  color: #888;
 }
