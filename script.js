@@ -1,117 +1,88 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const chatArea = document.getElementById('chatArea');
-    const promptInput = document.getElementById('promptInput');
-    const sendButton = document.getElementById('sendButton');
-    const apiKeyModal = document.getElementById('apiKeyModal');
-    const openApiKeyModal = document.getElementById('openApiKeyModal');
-    const closeModal = document.getElementById('closeModal');
-    const saveApiKeyButton = document.getElementById('saveApiKey');
-    const geminiApiKeyInput = document.getElementById('geminiApiKey');
-    const apiKeyStatus = document.getElementById('apiKeyStatus');
+const apiKey = "AIzaSyAlYwl8tgxT4do26w6LiuP18f75jU83dfQ";
+const model = "models/gemini-pro";
 
-    let storedApiKey = localStorage.getItem('geminiApiKey');
-    if (storedApiKey) {
-        geminiApiKeyInput.value = storedApiKey;
-    } else {
-        apiKeyModal.style.display = 'flex'; // Show modal on first load
-    }
+const chatForm = document.getElementById("chat-form");
+const userInput = document.getElementById("user-input");
+const chatContainer = document.getElementById("chat-container");
+const scrollBtn = document.getElementById("scroll-btn");
+const themeToggle = document.getElementById("theme-toggle");
 
-    openApiKeyModal.addEventListener('click', () => {
-        apiKeyModal.style.display = 'flex';
-        apiKeyStatus.style.display = 'none';
+// Load chat history
+window.addEventListener("DOMContentLoaded", () => {
+  chatContainer.innerHTML = localStorage.getItem("chat-history") || "";
+  document.body.classList.toggle("light", localStorage.getItem("theme") === "light");
+});
+
+// Scroll behavior
+scrollBtn.addEventListener("click", () => {
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+});
+
+chatContainer.addEventListener("scroll", () => {
+  const nearBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 100;
+  scrollBtn.style.display = nearBottom ? "none" : "block";
+});
+
+function saveHistory() {
+  localStorage.setItem("chat-history", chatContainer.innerHTML);
+}
+
+function appendMessage(sender, text, markdown = false) {
+  const msg = document.createElement("div");
+  msg.className = `chat-message ${sender}`;
+  msg.innerHTML = markdown ? marked.parse(text) : text;
+  chatContainer.appendChild(msg);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  saveHistory();
+}
+
+async function sendMessage(message) {
+  appendMessage("user", message);
+  userInput.value = "";
+
+  const typingMsg = document.createElement("div");
+  typingMsg.className = "chat-message bot";
+  typingMsg.textContent = "Typing...";
+  chatContainer.appendChild(typingMsg);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: message }] }]
+      })
     });
 
-    closeModal.addEventListener('click', () => {
-        apiKeyModal.style.display = 'none';
-    });
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
 
-    saveApiKeyButton.addEventListener('click', () => {
-        const apiKey = geminiApiKeyInput.value.trim();
-        if (apiKey) {
-            localStorage.setItem('geminiApiKey', apiKey);
-            storedApiKey = apiKey;
-            apiKeyStatus.style.display = 'block';
-            setTimeout(() => {
-                apiKeyModal.style.display = 'none';
-            }, 1500);
-        } else {
-            alert('Please enter your Gemini API key.');
-        }
-    });
+    let i = 0;
+    typingMsg.innerHTML = "";
+    const interval = setInterval(() => {
+      typingMsg.innerHTML = marked.parse(reply.slice(0, i));
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      if (i++ >= reply.length) {
+        clearInterval(interval);
+        saveHistory();
+      }
+    }, 10);
+  } catch (err) {
+    typingMsg.textContent = "Error fetching response.";
+    console.error(err);
+  }
+}
 
-    sendButton.addEventListener('click', sendMessage);
-    promptInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) { // Send on Enter without Shift
-            event.preventDefault();
-            sendMessage();
-        }
-    });
+chatForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const message = userInput.value.trim();
+  if (message) sendMessage(message);
+});
 
-    function sendMessage() {
-        const messageText = promptInput.value.trim();
-        if (messageText) {
-            displayMessage('user', messageText);
-            promptInput.value = '';
-            // Call Gemini API here (implementation will be more complex)
-            getBotResponse(messageText);
-        }
-    }
-
-    async function getBotResponse(userMessage) {
-        if (!storedApiKey) {
-            displayMessage('bot', 'Please enter and save your Gemini API key to get a response.');
-            apiKeyModal.style.display = 'flex';
-            return;
-        }
-
-        displayMessage('bot', 'Thinking...'); // Show a "thinking" message
-
-        try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${storedApiKey}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: userMessage }]
-                    }]
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Gemini API Error:', errorData);
-                displayMessage('bot', `Sorry, I encountered an error: ${errorData.error?.message || response.statusText}`);
-                return;
-            }
-
-            const data = await response.json();
-            const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-            // Remove the "thinking" message
-            const thinkingMessage = chatArea.lastElementChild;
-            if (thinkingMessage && thinkingMessage.classList.contains('message') && thinkingMessage.classList.contains('bot-message') && thinkingMessage.textContent === 'Thinking...') {
-                chatArea.removeChild(thinkingMessage);
-            }
-
-            if (botResponseText) {
-                displayMessage('bot', botResponseText);
-            } else {
-                displayMessage('bot', 'Sorry, I didn\'t get a valid response.');
-            }
-
-        } catch (error) {
-            console.error('Error calling Gemini API:', error);
-            displayMessage('bot', 'Sorry, something went wrong while trying to get a response.');
-        }
-    }
-
-    function displayMessage(sender, message) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', `${sender}-message`);
-        messageDiv.innerHTML = `<div class="avatar">${sender === 'user' ? 'You' : '𝐽𝛯𝐹𝐹 𝛸𝐷'}</div><div class="text-content">${message}</div>`;
-        chatArea.appendChild(messageDiv);
-        chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
-    }
+// Theme toggle
+themeToggle.addEventListener("change", () => {
+  const isLight = themeToggle.checked;
+  document.body.classList.toggle("light", isLight);
+  localStorage.setItem("theme", isLight ? "light" : "dark");
 });
