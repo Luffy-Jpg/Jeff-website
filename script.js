@@ -1,70 +1,116 @@
-// Get references to the chat elements
-const chatTab = document.getElementById('chatbot-tab'); // You'll need to create this HTML element
-const chatWindow = document.getElementById('chat-window'); // You'll need to create this HTML element
-const messageInput = document.getElementById('message-input'); // You'll need to create this HTML element
-const sendButton = document.getElementById('send-button'); // You might create this
+document.addEventListener('DOMContentLoaded', () => {
+    const chatBody = document.getElementById('chatBody');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const apiKeyModal = document.getElementById('apiKeyModal');
+    const openApiKeyModal = document.getElementById('openApiKeyModal');
+    const closeModal = document.getElementById('closeModal');
+    const saveApiKeyButton = document.getElementById('saveApiKey');
+    const geminiApiKeyInput = document.getElementById('geminiApiKey');
+    const apiKeyStatus = document.getElementById('apiKeyStatus');
 
-// Function to open/close the chatbot
-function toggleChatbot() {
-    chatWindow.classList.toggle('open'); // You'll need CSS to control the 'open' class
-}
-
-// Event listener for the chat tab
-chatTab.addEventListener('click', toggleChatbot);
-
-// Function to send a message
-function sendMessage() {
-    const userMessage = messageInput.value.trim();
-    if (userMessage) {
-        displayUserMessage(userMessage);
-        messageInput.value = ''; // Clear the input
-
-        // Here you would typically send the userMessage to your server-side endpoint
-        // which would then call the Gemini API.
-        fetch('/api/gemini', { // Example API endpoint on your server
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message: userMessage }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            displayBotMessage(data.response); // Assuming the server returns a 'response' field
-        })
-        .catch(error => {
-            console.error('Error sending message to Gemini:', error);
-            displayBotMessage('Sorry, I encountered an error.');
-        });
+    let storedApiKey = localStorage.getItem('geminiApiKey');
+    if (storedApiKey) {
+        geminiApiKeyInput.value = storedApiKey;
+    } else {
+        apiKeyModal.style.display = 'flex'; // Show modal on first load
     }
-}
 
-// Function to display user messages in the chat window
-function displayUserMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('user-message'); // Add CSS for styling
-    messageDiv.textContent = message;
-    chatWindow.appendChild(messageDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the latest message
-}
+    openApiKeyModal.addEventListener('click', () => {
+        apiKeyModal.style.display = 'flex';
+        apiKeyStatus.style.display = 'none';
+    });
 
-// Function to display bot messages in the chat window
-function displayBotMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('bot-message'); // Add CSS for styling
-    messageDiv.textContent = message;
-    chatWindow.appendChild(messageDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the latest message
-}
+    closeModal.addEventListener('click', () => {
+        apiKeyModal.style.display = 'none';
+    });
 
-// Event listener for the send button (if you have one)
-if (sendButton) {
+    saveApiKeyButton.addEventListener('click', () => {
+        const apiKey = geminiApiKeyInput.value.trim();
+        if (apiKey) {
+            localStorage.setItem('geminiApiKey', apiKey);
+            storedApiKey = apiKey;
+            apiKeyStatus.style.display = 'block';
+            setTimeout(() => {
+                apiKeyModal.style.display = 'none';
+            }, 1500);
+        } else {
+            alert('Please enter your Gemini API key.');
+        }
+    });
+
     sendButton.addEventListener('click', sendMessage);
-}
+    messageInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
 
-// Handle sending message on Enter key press in the input field
-messageInput.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        sendMessage();
+    function sendMessage() {
+        const messageText = messageInput.value.trim();
+        if (messageText) {
+            displayMessage('user', messageText);
+            messageInput.value = '';
+            // Call Gemini API here (implementation will be more complex)
+            getBotResponse(messageText);
+        }
+    }
+
+    async function getBotResponse(userMessage) {
+        if (!storedApiKey) {
+            displayMessage('bot', 'Please enter and save your Gemini API key to get a response.');
+            apiKeyModal.style.display = 'flex';
+            return;
+        }
+
+        displayMessage('bot', 'Thinking...'); // Show a "thinking" message
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${storedApiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: userMessage }]
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Gemini API Error:', errorData);
+                displayMessage('bot', `Sorry, I encountered an error: ${errorData.error?.message || response.statusText}`);
+                return;
+            }
+
+            const data = await response.json();
+            const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            // Remove the "thinking" message
+            const thinkingMessage = chatBody.lastElementChild;
+            if (thinkingMessage && thinkingMessage.classList.contains('bot-message') && thinkingMessage.textContent === 'Thinking...') {
+                chatBody.removeChild(thinkingMessage);
+            }
+
+            if (botResponseText) {
+                displayMessage('bot', botResponseText);
+            } else {
+                displayMessage('bot', 'Sorry, I didn\'t get a valid response.');
+            }
+
+        } catch (error) {
+            console.error('Error calling Gemini API:', error);
+            displayMessage('bot', 'Sorry, something went wrong while trying to get a response.');
+        }
+    }
+
+    function displayMessage(sender, message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', `${sender}-message`);
+        messageDiv.textContent = message;
+        chatBody.appendChild(messageDiv);
+        chatBody.scrollTop = chatBody.scrollHeight; // Scroll to the bottom
     }
 });
