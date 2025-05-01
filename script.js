@@ -1,4 +1,4 @@
-const apiKey = "AIzaSyAlYwl8tgxT4do26w6LiuP18f75jU83dfQ";
+const apiKey = "AIzaSyCWYu7Kr9Tp1dHY0kXtaTiRZr3-hGxObg4";
 const model = "models/gemini-pro";
 
 const chatForm = document.getElementById("chat-form");
