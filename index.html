@@ -8,19 +8,44 @@
 </head>
 <body>
     <div class="container">
-        <div class="chat-header">
-            <img src="bot_avatar.png" alt="𝐽𝛯𝐹𝐹 𝛸𝐷" class="avatar">
-            <div class="chat-info">
-                <h2>𝐽𝛯𝐹𝐹 𝛸𝐷</h2>
-                <p>Online</p>
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-button">+ New Chat</button>
+            </div>
+            <div class="history">
+                </div>
+            <div class="sidebar-footer">
+                <button class="settings-button">Settings</button>
+                <button class="logout-button">Log out</button>
             </div>
         </div>
-        <div class="chat-body" id="chatBody">
-            <div class="message bot-message">
-                Hello! I'm 𝐽𝛯𝐹𝐹 𝛸𝐷. How can I help you today?
+        <div class="main-content">
+            <div class="chat-area" id="chatArea">
+                <div class="welcome-message">
+                    <h1>Welcome to 𝐽𝛯𝐹𝐹 𝛸𝐷</h1>
+                    <p>How can I assist you today?</p>
+                </div>
+            </div>
+            <div class="input-area">
+                <textarea id="promptInput" placeholder="Send a message..."></textarea>
+                <button id="sendButton" aria-label="Send">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="send-icon">
+                        <path d="M4 13V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7l-8 5-8-5z"></path>
+                    </svg>
+                </button>
             </div>
         </div>
-        <div class="chat-footer">
-            <input type="text" id="messageInput" placeholder="Type your message...">
-            <button id="sendButton">Send</button>
-    
+        <div class="api-key-modal" id="apiKeyModal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModal">&times;</span>
+                <h2>Enter Gemini API Key</h2>
+                <input type="text" id="geminiApiKey" value="AIzaSyAlYwl8tgxT4do26w6LiuP18f75jU83dfQ" placeholder="Paste your API key here">
+                <button id="saveApiKey">Save API Key</button>
+                <p class="api-key-status" id="apiKeyStatus">API key saved!</p>
+            </div>
+        </div>
+        <button id="openApiKeyModal" class="api-key-button">Set API Key</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
