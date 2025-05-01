@@ -1,8 +1,8 @@
 :root {
   --bg-color: #0d0d0d;
   --text-color: #eee;
-  --user-color: #00ff88;
-  --bot-color: #00f0ff;
+  --user-color: #00b894;
+  --bot-color: #0984e3;
   --input-bg: #1a1a1a;
   --accent: #0af;
 }
@@ -10,26 +10,24 @@
 body.light {
   --bg-color: #f0f0f0;
   --text-color: #222;
-  --user-color: #005500;
-  --bot-color: #003366;
-  --input-bg: #ffffff;
+  --user-color: #c8e6c9;
+  --bot-color: #bbdefb;
+  --input-bg: #fff;
   --accent: #007bff;
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
   margin: 0;
+  font-family: 'Segoe UI', sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
   transition: background 0.5s, color 0.5s;
-  overflow: hidden;
-  position: relative;
   background-image: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes gradientBG {
@@ -40,21 +38,21 @@ body {
 
 header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: var(--input-bg);
+  align-items: center;
+  background: var(--input-bg);
   padding: 10px 20px;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 header img {
   height: 40px;
   border-radius: 10px;
-  margin-right: 10px;
-}
-
-header h1 {
-  flex: 1;
-  font-size: 1.4rem;
 }
 
 .toggle {
@@ -71,13 +69,10 @@ header h1 {
 
 .slider {
   position: absolute;
+  background: #ccc;
   cursor: pointer;
-  background-color: #ccc;
+  top: 0; left: 0; right: 0; bottom: 0;
   border-radius: 34px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   transition: 0.4s;
 }
 
@@ -93,11 +88,11 @@ header h1 {
   transition: 0.4s;
 }
 
-.toggle input:checked + .slider {
+input:checked + .slider {
   background-color: var(--accent);
 }
 
-.toggle input:checked + .slider::before {
+input:checked + .slider::before {
   transform: translateX(26px);
 }
 
@@ -112,8 +107,8 @@ main {
 #chat-container {
   flex: 1;
   overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.3);
   padding: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
   border-radius: 10px;
 }
@@ -126,15 +121,15 @@ main {
 }
 
 .chat-message.user {
-  background-color: var(--user-color);
+  background: var(--user-color);
   text-align: right;
-  color: #fff;
+  color: #000;
 }
 
 .chat-message.bot {
-  background-color: var(--bot-color);
+  background: var(--bot-color);
   text-align: left;
-  color: #fff;
+  color: #000;
 }
 
 #chat-form {
@@ -153,7 +148,7 @@ main {
 
 button {
   padding: 12px;
-  background-color: var(--accent);
+  background: var(--accent);
   border: none;
   color: white;
   font-weight: bold;
@@ -161,22 +156,6 @@ button {
   border-radius: 0 8px 8px 0;
 }
 
-code {
-  background: #333;
-  color: #f8f8f2;
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-family: monospace;
-}
-
-pre {
-  background: #222;
-  padding: 10px;
-  border-radius: 8px;
-  overflow-x: auto;
-}
-
-/* FAB button */
 #scroll-btn {
   position: fixed;
   bottom: 20px;
@@ -193,7 +172,7 @@ pre {
   box-shadow: 0 0 10px #000;
 }
 
-/* Responsive */
+/* Mobile-friendly */
 @media (max-width: 600px) {
   header h1 {
     font-size: 1.1rem;
@@ -205,5 +184,11 @@ pre {
 
   .chat-message {
     font-size: 0.95rem;
+  }
+
+  #scroll-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 }
