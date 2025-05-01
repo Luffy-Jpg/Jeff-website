@@ -7,20 +7,24 @@ const chatContainer = document.getElementById("chat-container");
 const scrollBtn = document.getElementById("scroll-btn");
 const themeToggle = document.getElementById("theme-toggle");
 
-// Load chat history
+// Load chat and theme
 window.addEventListener("DOMContentLoaded", () => {
   chatContainer.innerHTML = localStorage.getItem("chat-history") || "";
-  document.body.classList.toggle("light", localStorage.getItem("theme") === "light");
-});
-
-// Scroll behavior
-scrollBtn.addEventListener("click", () => {
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light");
+    themeToggle.checked = true;
+  }
+  scrollBtn.style.display = "none";
 });
 
 chatContainer.addEventListener("scroll", () => {
   const nearBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 100;
   scrollBtn.style.display = nearBottom ? "none" : "block";
+});
+
+scrollBtn.addEventListener("click", () => {
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 });
 
 function saveHistory() {
@@ -40,10 +44,10 @@ async function sendMessage(message) {
   appendMessage("user", message);
   userInput.value = "";
 
-  const typingMsg = document.createElement("div");
-  typingMsg.className = "chat-message bot";
-  typingMsg.textContent = "Typing...";
-  chatContainer.appendChild(typingMsg);
+  const typing = document.createElement("div");
+  typing.className = "chat-message bot";
+  typing.textContent = "Typing...";
+  chatContainer.appendChild(typing);
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
   try {
@@ -59,9 +63,9 @@ async function sendMessage(message) {
     const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
 
     let i = 0;
-    typingMsg.innerHTML = "";
+    typing.innerHTML = "";
     const interval = setInterval(() => {
-      typingMsg.innerHTML = marked.parse(reply.slice(0, i));
+      typing.innerHTML = marked.parse(reply.slice(0, i));
       chatContainer.scrollTop = chatContainer.scrollHeight;
       if (i++ >= reply.length) {
         clearInterval(interval);
@@ -69,18 +73,17 @@ async function sendMessage(message) {
       }
     }, 10);
   } catch (err) {
-    typingMsg.textContent = "Error fetching response.";
+    typing.textContent = "Error fetching response.";
     console.error(err);
   }
 }
 
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const message = userInput.value.trim();
-  if (message) sendMessage(message);
+  const msg = userInput.value.trim();
+  if (msg) sendMessage(msg);
 });
 
-// Theme toggle
 themeToggle.addEventListener("change", () => {
   const isLight = themeToggle.checked;
   document.body.classList.toggle("light", isLight);
