@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chatBody = document.getElementById('chatBody');
-    const messageInput = document.getElementById('messageInput');
+    const chatArea = document.getElementById('chatArea');
+    const promptInput = document.getElementById('promptInput');
     const sendButton = document.getElementById('sendButton');
     const apiKeyModal = document.getElementById('apiKeyModal');
     const openApiKeyModal = document.getElementById('openApiKeyModal');
@@ -40,17 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     sendButton.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
+    promptInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) { // Send on Enter without Shift
+            event.preventDefault();
             sendMessage();
         }
     });
 
     function sendMessage() {
-        const messageText = messageInput.value.trim();
+        const messageText = promptInput.value.trim();
         if (messageText) {
             displayMessage('user', messageText);
-            messageInput.value = '';
+            promptInput.value = '';
             // Call Gemini API here (implementation will be more complex)
             getBotResponse(messageText);
         }
@@ -89,9 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
             // Remove the "thinking" message
-            const thinkingMessage = chatBody.lastElementChild;
-            if (thinkingMessage && thinkingMessage.classList.contains('bot-message') && thinkingMessage.textContent === 'Thinking...') {
-                chatBody.removeChild(thinkingMessage);
+            const thinkingMessage = chatArea.lastElementChild;
+            if (thinkingMessage && thinkingMessage.classList.contains('message') && thinkingMessage.classList.contains('bot-message') && thinkingMessage.textContent === 'Thinking...') {
+                chatArea.removeChild(thinkingMessage);
             }
 
             if (botResponseText) {
@@ -109,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayMessage(sender, message) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', `${sender}-message`);
-        messageDiv.textContent = message;
-        chatBody.appendChild(messageDiv);
-        chatBody.scrollTop = chatBody.scrollHeight; // Scroll to the bottom
+        messageDiv.innerHTML = `<div class="avatar">${sender === 'user' ? 'You' : '𝐽𝛯𝐹𝐹 𝛸𝐷'}</div><div class="text-content">${message}</div>`;
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
     }
 });
