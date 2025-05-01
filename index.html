@@ -1,72 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>𝐽𝛯𝐹𝐹 𝛸𝐷 - Bot Support</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/949/949459.png" type="image/x-icon"/>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="chatbot.css" /> </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with 𝐽𝛯𝐹𝐹 𝛸𝐷</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <header>
-    <h1 class="anime-header">𝐽𝛯𝐹𝐹 𝛸𝐷</h1>
-  </header>
-
-  <main>
-    <audio autoplay loop hidden>
-      <source src="https://audio.jukehost.co.uk/BzHJdutuumeC2C4RDfW6qZCXals7mw73" type="audio/mp3">
-      Your browser does not support the audio element.
-    </audio>
-
-    <section class="anime-section">
-      <h2 class="anime-title">Bot Hosting & Banning Services</h2>
-      <img src="https://files.catbox.moe/nwstc4.jpeg" alt="Anya" class="anime-character" />
-    </section>
-
-    <section class="anime-section">
-      <h2 class="anime-title">Connect With Me</h2>
-      <div class="social-links">
-        <a href="https://wa.me/917090462940" class="social-button whatsapp-button" target="_blank">
-          <img src="https://cdn-icons-png.flaticon.com/128/5968/5968841.png" alt="WhatsApp" class="social-logo"/>
-          <span>WhatsApp</span>
-        </a>
-        <a href="https://www.instagram.com/sxy.rdj" class="social-button instagram-button" target="_blank">
-          <img src="https://cdn-icons-png.flaticon.com/128/733/733558.png" alt="Instagram" class="social-logo"/>
-          <span>Instagram</span>
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <div class="chatbot-tab" id="chatbot-tab">
-    <img src="https://cdn-icons-png.flaticon.com/128/6363/6363490.png" alt="Chatbot Icon" class="chatbot-icon" />
-    <span>AI Support</span>
-  </div>
-
-  <div class="chatbot-window" id="chat-window">
-    <div class="chat-header">
-      <img src="https://cdn-icons-png.flaticon.com/128/6363/6363490.png" alt="Chatbot Icon" class="chatbot-icon-header" />
-      <span>AI Chatbot</span>
-      <button class="close-button" onclick="document.getElementById('chat-window').classList.remove('open')">×</button>
+    <div class="container">
+        <div class="chat-header">
+            <img src="bot_avatar.png" alt="𝐽𝛯𝐹𝐹 𝛸𝐷" class="avatar">
+            <div class="chat-info">
+                <h2>𝐽𝛯𝐹𝐹 𝛸𝐷</h2>
+                <p>Online</p>
+            </div>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="message bot-message">
+                Hello! I'm 𝐽𝛯𝐹𝐹 𝛸𝐷. How can I help you today?
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button id="sendButton">Send</button>
+        </div>
+        <div class="api-key-modal" id="apiKeyModal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModal">&times;</span>
+                <h2>Enter Gemini API Key</h2>
+                <input type="text" id="geminiApiKey" value="AIzaSyAlYwl8tgxT4do26w6LiuP18f75jU83dfQ" placeholder="Paste your API key here">
+                <button id="saveApiKey">Save API Key</button>
+                <p class="api-key-status" id="apiKeyStatus">API key saved!</p>
+            </div>
+        </div>
+        <button id="openApiKeyModal" class="api-key-button">Set API Key</button>
     </div>
-    <div class="chat-messages" id="chat-messages">
-      </div>
-    <div class="chat-input-area">
-      <input type="text" id="message-input" placeholder="Type your message...">
-      <button id="send-button">Send</button>
-    </div>
-  </div>
-
-  <footer>
-    <p class="footer-text">© 2025 𝐽𝛯𝐹𝐹 𝛸𝐷. All Rights Reserved</p>
-  </footer>
-
-  <script src="script.js"></script>
-  <script>
-    // Basic toggle functionality (you can integrate this into your existing script.js)
-    document.getElementById('chatbot-tab').addEventListener('click', () => {
-      document.getElementById('chat-window').classList.add('open');
-    });
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
