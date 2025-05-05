@@ -1,194 +1,141 @@
 :root {
-  --bg-color: #0d0d0d;
-  --text-color: #eee;
-  --user-color: #00b894;
-  --bot-color: #0984e3;
-  --input-bg: #1a1a1a;
-  --accent: #0af;
-}
-
-body.light {
-  --bg-color: #f0f0f0;
-  --text-color: #222;
-  --user-color: #c8e6c9;
-  --bot-color: #bbdefb;
-  --input-bg: #fff;
-  --accent: #007bff;
+  --bg: #121212;
+  --text: #e0e0e0;
+  --accent: #1e90ff;
+  --card: #1f1f1f;
 }
 
 body {
-  margin: 0;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Segoe UI', sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.5s, color 0.5s;
-  background-image: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  height: 100vh;
+  margin: 0;
   display: flex;
   flex-direction: column;
-}
-
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  height: 100vh;
 }
 
 header {
   display: flex;
+  align-items: center;
+  background: var(--card);
+  padding: 0.5rem 1rem;
   justify-content: space-between;
-  align-items: center;
-  background: var(--input-bg);
-  padding: 10px 20px;
 }
 
-.logo-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-header img {
+.logo {
   height: 40px;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
-.toggle {
+h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.toggle-switch {
   position: relative;
-  width: 50px;
-  height: 24px;
+  width: 40px;
+  height: 20px;
 }
 
-.toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.toggle-switch input {
+  display: none;
 }
 
 .slider {
+  background: gray;
+  border-radius: 20px;
   position: absolute;
-  background: #ccc;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: 34px;
-  transition: 0.4s;
+  inset: 0;
+  transition: 0.3s;
 }
 
-.slider::before {
+.slider:before {
   content: "";
   position: absolute;
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: white;
+  transition: 0.3s;
   border-radius: 50%;
-  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: var(--accent);
+  background: var(--accent);
 }
 
-input:checked + .slider::before {
-  transform: translateX(26px);
+input:checked + .slider:before {
+  transform: translateX(20px);
 }
 
 main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 10px;
   overflow: hidden;
 }
 
-#chat-container {
+#chatContainer {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.3);
-  margin-bottom: 10px;
-  border-radius: 10px;
+  padding: 1rem;
 }
 
-.chat-message {
-  margin: 10px 0;
-  padding: 10px;
+.message {
+  margin: 0.5rem 0;
+  background: var(--card);
+  padding: 0.75rem;
   border-radius: 8px;
-  white-space: pre-wrap;
 }
 
-.chat-message.user {
-  background: var(--user-color);
+.user {
   text-align: right;
-  color: #000;
+  background-color: #272727;
 }
 
-.chat-message.bot {
-  background: var(--bot-color);
-  text-align: left;
-  color: #000;
+.bot {
+  background-color: #1e1e1e;
 }
 
-#chat-form {
+#chatForm {
   display: flex;
+  padding: 0.5rem;
+  background: var(--card);
 }
 
-#user-input {
+#userInput {
   flex: 1;
-  padding: 12px;
-  font-size: 1rem;
+  padding: 0.5rem;
   border: none;
-  border-radius: 8px 0 0 8px;
-  background: var(--input-bg);
-  color: var(--text-color);
+  border-radius: 4px;
+  margin-right: 0.5rem;
 }
 
-button {
-  padding: 12px;
+button[type="submit"] {
   background: var(--accent);
-  border: none;
   color: white;
-  font-weight: bold;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 0 8px 8px 0;
 }
 
-#scroll-btn {
+#scrollDownBtn {
   position: fixed;
-  bottom: 20px;
+  bottom: 80px;
   right: 20px;
   background: var(--accent);
   color: white;
   border: none;
-  font-size: 1.5rem;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
   display: none;
-  box-shadow: 0 0 10px #000;
-}
-
-/* Mobile-friendly */
-@media (max-width: 600px) {
-  header h1 {
-    font-size: 1.1rem;
-  }
-
-  #user-input, button {
-    font-size: 1rem;
-  }
-
-  .chat-message {
-    font-size: 0.95rem;
-  }
-
-  #scroll-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
+  justify-content: center;
+  align-items: center;
 }
