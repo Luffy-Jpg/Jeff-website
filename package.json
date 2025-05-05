@@ -1,0 +1,21 @@
+{
+  "name": "chatbot-project",
+  "version": "1.0.0",
+  "description": "Fictional Chatbot powered by Serverless functions",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev", // Useful for local testing
+    "start": "node server.js" // If you were running a normal server
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "node-fetch": "^2.6.1"  // If you're using it to fetch data (e.g. from external APIs)
+  },
+  "devDependencies": {
+    "vercel": "^23.0.1"
+  },
+  "engines": {
+    "node": "14.x" // or any other version supported by Vercel
+  }
+}
