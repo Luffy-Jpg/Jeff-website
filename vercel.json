@@ -1,8 +1,15 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
   "routes": [
     {
-      "src": "/api/getChatResponse",
-      "dest": "/pages/api/getChatResponse.js"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
     }
   ]
 }
