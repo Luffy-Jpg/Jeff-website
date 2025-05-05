@@ -2,11 +2,6 @@ const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatContainer = document.getElementById("chatContainer");
 const scrollBtn = document.getElementById("scrollDownBtn");
-const themeToggle = document.getElementById("themeToggle");
-
-themeToggle.addEventListener("change", () => {
-  document.body.classList.toggle("light-mode");
-});
 
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
