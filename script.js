@@ -1,65 +1,43 @@
-const chatForm = document.getElementById("chatForm");
-const userInput = document.getElementById("userInput");
-const chatContainer = document.getElementById("chatContainer");
-const scrollBtn = document.getElementById("scrollDownBtn");
+// Get elements from HTML
+const sendButton = document.getElementById("send-btn");
+const userInput = document.getElementById("user-input");
+const chatBox = document.getElementById("chat-box");
 
-chatForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const message = userInput.value.trim();
-  if (!message) return;
+// Function to display messages
+function displayMessage(message, sender) {
+    const messageDiv = document.createElement("div");
+    messageDiv.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+    messageDiv.textContent = message;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-  appendMessage(message, "user");
-  userInput.value = "";
-  scrollToBottom();
-
-  appendMessage("Typing...", "bot", true);
-
-  try {
-    const res = await fetch("/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message })
-    });
-
-    const data = await res.json();
-    const text = data.text || "Sorry, no response from server.";
+// Function to send message and get response from backend
+async function handleUserInput() {
+    const userText = userInput.value.trim().toLowerCase();
     
-    // Remove typing animation and update bot message
-    updateLastBotMessage(text);
-    scrollToBottom();
-  } catch (error) {
-    updateLastBotMessage("Error: " + error.message);
-    scrollToBottom();
-  }
+    if (userText) {
+        displayMessage(userText, "user");
+        userInput.value = ""; // Clear input field
+
+        // Send user input to backend for AI response
+        const response = await fetch('http://localhost:3000/getChatResponse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userInput: userText })
+        });
+
+        const data = await response.json();
+        displayMessage(data.botResponse, "bot");
+    }
+}
+
+// Send button click event listener
+sendButton.addEventListener("click", handleUserInput);
+
+// Allow pressing Enter to send messages
+userInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        handleUserInput();
+    }
 });
-
-function appendMessage(text, type, typing = false) {
-  const div = document.createElement("div");
-  div.className = `message ${type}`;
-  div.innerText = text;
-  
-  if (typing) {
-    div.classList.add("typing");
-  }
-  
-  chatContainer.appendChild(div);
-}
-
-function updateLastBotMessage(text) {
-  const messages = document.querySelectorAll(".message.bot");
-  if (messages.length > 0) {
-    messages[messages.length - 1].innerText = text;
-    messages[messages.length - 1].classList.remove("typing");
-  }
-}
-
-function scrollToBottom() {
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-chatContainer.addEventListener("scroll", () => {
-  const nearBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 100;
-  scrollBtn.style.display = nearBottom ? "none" : "flex";
-});
-
-scrollBtn.addEventListener("click", scrollToBottom);
