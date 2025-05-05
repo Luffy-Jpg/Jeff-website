@@ -2,11 +2,11 @@
 require('dotenv').config();  // For loading environment variables
 const express = require('express');
 const { Client } = require('pg');  // PostgreSQL client
-const fetch = require('node-fetch');  // To make API requests to XAI
+const fetch = require('node-fetch');  // To make API requests to Together.ai
 const app = express();
 const port = 3000;  // The server will run on this port
 
-// Connect to PostgreSQL database
+// Connect to PostgreSQL database (using your previous database setup)
 const client = new Client({
     connectionString: process.env.DATABASE_URL,  // PostgreSQL connection string from your .env file
     ssl: { rejectUnauthorized: false }  // For SSL security
@@ -19,17 +19,17 @@ client.connect()
 // Middleware to handle JSON requests
 app.use(express.json());
 
-// API route to handle chat messages and get response from XAI
+// API route to handle chat messages and get response from Together.ai
 app.post('/getChatResponse', async (req, res) => {
     const userInput = req.body.userInput;
     console.log('User Input:', userInput);  // Debugging log to check input
 
     try {
-        // Get AI response from XAI API
+        // Get AI response from Together.ai API
         const aiResponse = await getAIResponse(userInput);
         console.log('AI Response:', aiResponse);  // Debugging log to check the AI response
 
-        // Save the conversation in PostgreSQL database
+        // Save the conversation in PostgreSQL database (same previous logic)
         await saveChatToDB(userInput, aiResponse);
 
         // Send the AI response back to the frontend
@@ -40,24 +40,24 @@ app.post('/getChatResponse', async (req, res) => {
     }
 });
 
-// Function to interact with the XAI API and get AI response
+// Function to interact with the Together.ai API and get AI response
 async function getAIResponse(userText) {
-    const response = await fetch('https://api.xai.com/chat', {
+    const response = await fetch('https://api.together.ai/v1/ask', {  // Replace with the correct Together.ai endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.XAI_API_KEY}`  // Your XAI API key from .env file
+            'Authorization': `Bearer ${process.env.TOGETHER_API_KEY}`  // Your Together.ai API key from .env file
         },
-        body: JSON.stringify({ prompt: userText })
+        body: JSON.stringify({ question: userText })
     });
 
     const data = await response.json();
-    console.log('XAI API Response:', data);  // Debugging log to check the API response
+    console.log('Together.ai Response:', data);  // Debugging log to check the API response
 
-    if (data && data.botResponse) {
-        return data.botResponse;
+    if (data && data.answer) {
+        return data.answer;
     } else {
-        throw new Error('No response from XAI API');
+        throw new Error('No response from Together.ai');
     }
 }
 
