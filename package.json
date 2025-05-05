@@ -7,7 +7,7 @@
     "build": "vercel build"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1"  // or other necessary dependencies
+    "node-fetch": "^2.6.1"
   },
   "engines": {
     "node": "22.x"
