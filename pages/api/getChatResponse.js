@@ -7,6 +7,7 @@ export default async function handler(req, res) {
     const { userInput } = req.body;
 
     try {
+      // Create the chat completion using Together.ai
       const stream = await together.chat.completions.create({
         model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
         messages: [
@@ -23,6 +24,7 @@ export default async function handler(req, res) {
         botResponse += chunk.choices[0]?.delta?.content || "";
       }
 
+      // Send back the bot's response
       res.status(200).json({ botResponse });
     } catch (error) {
       console.error("Error from Together AI:", error);
