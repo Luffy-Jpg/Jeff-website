@@ -1,3 +1,4 @@
+// chatbot.js
 // Function to display messages in the chat window
 function displayMessage(message, sender) {
   const chatWindow = document.getElementById('chatWindow');
@@ -17,7 +18,7 @@ async function sendMessageToBot(userInput) {
   
   try {
     // Send the user input to the backend (API call)
-    const response = await fetch('/api/chat', {  // Make sure your backend handles this endpoint
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +27,6 @@ async function sendMessageToBot(userInput) {
     });
 
     const data = await response.json();
-    console.log(data);  // Check response for errors or success
     
     if (data.error) {
       displayMessage('Sorry, something went wrong!', 'bot');
