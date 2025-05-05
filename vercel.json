@@ -1,8 +1,8 @@
 {
-  "builds": [
+  "routes": [
     {
-      "src": "api/chat.js",
-      "use": "@vercel/node"
+      "src": "/api/getChatResponse",
+      "dest": "/pages/api/getChatResponse.js"
     }
   ]
 }
