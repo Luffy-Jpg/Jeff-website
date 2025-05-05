@@ -1,7 +1,7 @@
 {
-  "name": "chatbot-project",
+  "name": "jeff-xd",
   "version": "1.0.0",
-  "description": "Fictional Chatbot powered by Serverless functions",
+  "description": "Fictional Chatbot powered by jeff-xd",
   "scripts": {
     "dev": "vercel dev",
     "build": "vercel build"
