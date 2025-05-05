@@ -1,24 +1,35 @@
-export default async function handler(req, res) {
+// api/chat.js
+const fetch = require('node-fetch'); // If you're using node-fetch for making API calls
+
+module.exports = async (req, res) => {
   if (req.method === 'POST') {
-    const { userInput } = req.body;
+    const { userInput } = req.body; // Get user input from the request body
+    
+    try {
+      // Make a request to the chatbot service (you can replace this with your chatbot API)
+      const response = await fetch('https://your-chatbot-api-url.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: userInput })
+      });
 
-    if (!userInput) {
-      return res.status(400).json({ error: 'User input is required' });
-    }
+      const data = await response.json(); // Parse the JSON response from your chatbot
 
-    // Sample response logic for testing
-    const mockBotResponse = (input) => {
-      if (input.toLowerCase().includes('hello')) {
-        return "Hi, how can I help you today?";
-      } else {
-        return "I'm sorry, I didn't understand that.";
+      if (data.error) {
+        return res.status(500).json({ error: 'Something went wrong with the chatbot.' });
       }
-    };
 
-    const botResponse = mockBotResponse(userInput);
-
-    return res.status(200).json({ botResponse });
+      // Send back the response from the chatbot
+      return res.status(200).json({ botResponse: data.response });
+      
+    } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
   } else {
+    // If the method is not POST, send a 405 error (Method Not Allowed)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
-}
+};
