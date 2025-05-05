@@ -1,0 +1,15 @@
+{
+  "name": "chatbot-project",
+  "version": "1.0.0",
+  "description": "Chatbot project with serverless backend",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"  // or other necessary dependencies
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
