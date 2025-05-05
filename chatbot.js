@@ -17,7 +17,7 @@ async function sendMessageToBot(userInput) {
   
   try {
     // Send the user input to the backend (API call)
-    const response = await fetch('/api/getChatResponse', {
+    const response = await fetch('/api/chat', {  // Make sure your backend handles this endpoint
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
