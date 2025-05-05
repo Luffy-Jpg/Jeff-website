@@ -1,4 +1,3 @@
-// script.js
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatContainer = document.getElementById("chatContainer");
@@ -18,7 +17,7 @@ chatForm.addEventListener("submit", async (e) => {
   userInput.value = "";
   scrollToBottom();
 
-  appendMessage("Typing...", "bot");
+  appendMessage("Typing...", "bot", true);
 
   try {
     const res = await fetch("/chat", {
@@ -28,7 +27,9 @@ chatForm.addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
-    const text = data.text || "No response.";
+    const text = data.text || "Sorry, no response from server.";
+    
+    // Remove typing animation and update bot message
     updateLastBotMessage(text);
     scrollToBottom();
   } catch (error) {
@@ -37,10 +38,15 @@ chatForm.addEventListener("submit", async (e) => {
   }
 });
 
-function appendMessage(text, type) {
+function appendMessage(text, type, typing = false) {
   const div = document.createElement("div");
   div.className = `message ${type}`;
   div.innerText = text;
+  
+  if (typing) {
+    div.classList.add("typing");
+  }
+  
   chatContainer.appendChild(div);
 }
 
@@ -48,6 +54,7 @@ function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".message.bot");
   if (messages.length > 0) {
     messages[messages.length - 1].innerText = text;
+    messages[messages.length - 1].classList.remove("typing");
   }
 }
 
@@ -56,8 +63,7 @@ function scrollToBottom() {
 }
 
 chatContainer.addEventListener("scroll", () => {
-  const nearBottom =
-    chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 100;
+  const nearBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 100;
   scrollBtn.style.display = nearBottom ? "none" : "flex";
 });
 
