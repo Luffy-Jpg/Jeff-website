@@ -1,113 +1,121 @@
-/* General styles */
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set background and text styles for dark theme */
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #121212;  /* Dark background */
-  color: #ffffff;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Chat container */
+/* Main chat container */
 .chat-container {
-  width: 100%;
-  max-width: 600px;
-  height: 80vh;
-  background: #333;
-  padding: 20px;
-  border-radius: 8px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    width: 400px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.messages {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding-right: 10px;
+/* Header of the chat */
+.chat-header {
+    background-color: #333;
+    padding: 15px;
+    text-align: center;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* The chat box where messages will appear */
+.chat-box {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #222;
+    color: #ddd;
+}
+
+/* Style for chat bubbles */
+.message {
+    margin-bottom: 15px;
+    max-width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.user-message {
+    background-color: #4a90e2;
+    margin-left: auto;
+    color: #fff;
+}
+
+.bot-message {
+    background-color: #555;
+    margin-right: auto;
+    color: #fff;
+}
+
+/* Styling for the input section */
+.user-input {
+    display: flex;
+    background-color: #333;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#user-input {
+    width: 85%;
+    padding: 10px;
+    border: none;
+    background-color: #444;
+    color: #fff;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
+#send-btn {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#send-btn:hover {
+    background-color: #357ab7;
+}
+
+/* Smooth scrolling for chat box */
+.chat-box {
+    scroll-behavior: smooth;
+}
+
+/* Additional animations for chatbot responses */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .message {
-  margin: 10px 0;
-  padding: 12px;
-  border-radius: 15px;
-  max-width: 80%;
-  word-wrap: break-word;
-}
-
-.message.user {
-  background-color: #4caf50;
-  color: white;
-  align-self: flex-end;
-}
-
-.message.bot {
-  background-color: #555;
-  color: white;
-  align-self: flex-start;
-}
-
-input[type="text"] {
-  padding: 10px;
-  width: calc(100% - 80px);
-  margin-right: 10px;
-  border-radius: 30px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  background-color: #444;
-  color: white;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #333;
-  color: white;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #555;
-}
-
-#scrollDownBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 15px;
-  cursor: pointer;
-  display: none;
-  transition: transform 0.3s;
-}
-
-#scrollDownBtn:hover {
-  transform: scale(1.1);
-}
-
-form {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* Smooth transitions */
-.message.bot.typing {
-  font-style: italic;
-  color: #777;
-  text-align: center;
+    animation: fadeIn 0.5s ease-in;
 }
